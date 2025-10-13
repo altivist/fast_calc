@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # # --- FetchContent для FTXUI ---
 include(FetchContent)
+include(FetchContent)
 
 FetchContent_Declare(
     ftxui
@@ -13,5 +14,11 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(ftxui)
+FetchContent_MakeAvailable(ftxui)
 
 add_executable(fast_calc src/main.cpp)
+target_link_libraries(fast_calc
+  PRIVATE ftxui::screen
+  PRIVATE ftxui::dom
+  PRIVATE ftxui::component
+)
