@@ -65,8 +65,8 @@ int main()
         cout << "DEBUG 1: ";
         for (const auto &token : tokens)
         {
-            cout << "Тип: " << static_cast<int>(token.t)
-                 << "\tТекст: \"" << token.text << "\"\n";
+            // cout << "Тип: " << static_cast<int>(token.t)
+            //      << "\tТекст: \"" << token.text << "\"\n";
         }
 
         // потом
