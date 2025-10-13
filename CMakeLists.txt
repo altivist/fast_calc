@@ -5,13 +5,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # # --- FetchContent для FTXUI ---
 include(FetchContent)
+include(FetchContent)
 
-
-FetchContent_Declare(ftxui
-  GIT_REPOSITORY https://github.com/ArthurSonzogni/FTXUI
-  GIT_TAG v6.1.9  # Replace with a version, tag, or commit hash
+FetchContent_Declare(
+    ftxui
+    GIT_REPOSITORY https://github.com/ArthurSonzogni/FTXUI.git
+    GIT_TAG v6.1.9
 )
 
+FetchContent_MakeAvailable(ftxui)
 FetchContent_MakeAvailable(ftxui)
 
 add_executable(fast_calc src/main.cpp)
