@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # # --- FetchContent для FTXUI ---
 include(FetchContent)
-include(FetchContent)
 
 FetchContent_Declare(
     ftxui
@@ -14,9 +13,25 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(ftxui)
-FetchContent_MakeAvailable(ftxui)
 
-add_executable(fast_calc src/main.cpp)
+include(FetchContent)
+FetchContent_Declare(
+    tomlplusplus
+    GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
+    GIT_TAG v3.4.0
+)
+FetchContent_MakeAvailable(tomlplusplus)
+
+
+add_executable(fast_calc
+src/main.cpp
+src/ui/main_screen.cpp
+src/ui/calc_screen.cpp
+src/ui/text_screen.cpp
+src/ui/history_now_screen.cpp
+
+)
+
 target_link_libraries(fast_calc
   PRIVATE ftxui::screen
   PRIVATE ftxui::dom
