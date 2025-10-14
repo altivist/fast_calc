@@ -55,7 +55,6 @@ void MainScreen::Run() {
     Component renderer = Renderer(container, [&] {
         Component content;
 
-
         if (current_tab == 0)
             content = history.get_component();
         else if (current_tab == 1)

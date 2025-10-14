@@ -9,24 +9,24 @@ public:
     virtual ~FileManager() = default;
 
     // Проверка существования файла или папки
-    bool exists(const std::string& path) const;
+    bool exists(const string& path) const;
 
     // Создать папку (включая вложенные)
-    bool create_dir(const std::string& path) const;
+    bool create_dir(const string& path) const;
 
     // Удалить файл или папку
-    bool remove(const std::string& path) const;
+    bool remove(const string& path) const;
 
     // Считать весь файл в строку
-    std::string read_file(const std::string& path) const;
+    string read_file(const string& path) const;
 
     // Записать строку в файл (перезаписать)
-    bool write_file(const std::string& path, const std::string& content) const;
+    bool write_file(const string& path, const string& content) const;
 
     // Унифицированные методы для наследников, работающих с TOML
     virtual void load() = 0;
     virtual void save() = 0;
 
 protected:
-    std::filesystem::path to_path(const std::string& path) const;
+    filesystem::path to_path(const string& path) const;
 };

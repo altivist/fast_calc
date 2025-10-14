@@ -33,6 +33,7 @@ src/ui/history_now_screen.cpp
 )
 
 target_link_libraries(fast_calc
+  tomlplusplus::tomlplusplus
   PRIVATE ftxui::screen
   PRIVATE ftxui::dom
   PRIVATE ftxui::component
