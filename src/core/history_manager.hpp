@@ -5,15 +5,15 @@
 
 class HistoryManager : public FileManager {
 public:
-    explicit HistoryManager(const std::string& history_file);
+    explicit HistoryManager(const string& history_file);
 
     void load() override;
     void save() override;
 
-    void add_entry(const std::string& entry);
-    const std::vector<std::string>& get_history() const;
+    void add_entry(const string& entry);
+    const vector<string>& get_history() const;
 
 private:
-    std::string history_file_path_;
-    std::vector<std::string> history_;
+    string history_file_path_;
+    vector<string> history_;
 };

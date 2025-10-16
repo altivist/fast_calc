@@ -1,37 +1,44 @@
 #include "text_screen.hpp"
+#include <ftxui/component/component_base.hpp>
+#include <ftxui/dom/elements.hpp>
 
-TextScreen::TextScreen(const std::vector<std::string>& lines)
-    : lines_(lines), scroll_position_(0) {}
+
+TextScreen::TextScreen(const vector<string>& lines)
+    : lines_(lines) {}
+
+    Element TextScreen::render_lines() {
+
+        Elements visible;
+        int end = std::min<int>(scroll_position_ + max_visible_, (int)lines_.size());
+        for (int i = scroll_position_; i < end; ++i) {
+            visible.push_back(text(lines_[i])); // без dim
+        };
+
+        if (lines_.empty()){
+            visible.push_back(text(defaultstring) | dim);
+        };
+
+
+        return vbox(visible);
+    }
 
 Component TextScreen::get_component() {
-    // Создаём контейнер, чтобы FTXUI мог обрабатывать события
-    auto container = Container::Vertical({});
-
-    auto renderer = Renderer(container, [&] {
-        Elements displayed;
-
-        int start = scroll_position_;
-        int end = std::min<int>(scroll_position_ + max_visible_, (int)lines_.size());
-
-        for (int i = start; i < end; ++i)
-            displayed.push_back(text(lines_[i]));
-
-        return vbox(displayed) | frame | flex;
+    auto base = Renderer([this] {
+        update_lines();             // обновляем строки перед рендером
+        return render_lines() | border | flex;
     });
 
-    // Вешаем обработку событий на контейнер через Renderer
-    auto with_events = Container::Vertical({renderer});
-    with_events |= CatchEvent([&](Event event) {
-        if (event == Event::ArrowUpCtrl) {
-            if (scroll_position_ > 0) scroll_position_--;
-            return true;
-        }
-        if (event == Event::ArrowDownCtrl) {
-            if (scroll_position_ + max_visible_ < (int)lines_.size()) scroll_position_++;
-            return true;
-        }
-        return false;
-    });
+    return base;
+};
 
-    return with_events;
-}
+bool TextScreen::handle_event(int i) {
+
+
+    switch (i) {
+    case 0: {if (scroll_position_ > 0) scroll_position_--; break;}
+    case 1: {if (scroll_position_ + max_visible_ < (int)lines_.size()) scroll_position_++; break;}
+    default:{ extra_handler(i); break;}
+    }
+    return true;
+
+    }
