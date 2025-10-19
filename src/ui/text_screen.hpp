@@ -4,6 +4,7 @@
 class TextScreen {
 public:
     explicit TextScreen(const vector<string>& lines);
+    void set_default_string(const string& value) { defaultstring = value; }
 
     Component get_component();
     virtual bool handle_event(int i);
@@ -15,7 +16,7 @@ protected:
     int max_visible_ = 40;
     vector<string> lines_;
 
-    string defaultstring = "Нет строк";
+    string defaultstring = "No lines";
 
     Element render_lines();
 };
