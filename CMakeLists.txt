@@ -49,6 +49,10 @@ target_link_libraries(fast_calc
   PRIVATE ftxui::component
 )
 
+if (APPLE)
+  target_link_libraries(fast_calc PRIVATE "-framework CoreFoundation")
+endif()
+
 enable_testing()
 
 add_executable(file_manager_tests

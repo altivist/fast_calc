@@ -8,24 +8,37 @@
 
 #include "ui/main_screen.hpp"
 
-double eval_func(const std::string& expr) {
+double eval_func(const std::string &expr)
+{
     std::stringstream ss(expr);
     double result = 0;
     double value = 0;
     char op = '+';
-    while (ss >> value) {
-        switch (op) {
-            case '+': result += value; break;
-            case '-': result -= value; break;
-            case '*': result *= value; break;
-            case '/': if (value != 0) result /= value; break;
+    while (ss >> value)
+    {
+        switch (op)
+        {
+        case '+':
+            result += value;
+            break;
+        case '-':
+            result -= value;
+            break;
+        case '*':
+            result *= value;
+            break;
+        case '/':
+            if (value != 0)
+                result /= value;
+            break;
         }
         ss >> op;
     }
     return result;
 }
 
-int main() {
+int main()
+{
     MainScreen app(eval_func);
     app.Run();
     return 0;

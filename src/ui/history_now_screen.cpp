@@ -1,9 +1,14 @@
 #include "history_now_screen.hpp"
+#include "../core/localization.hpp"
 
-HistoryScreen::HistoryScreen(const Calc& calc)
-    : TextScreen({}), calc_ref(calc) {
+HistoryScreen::HistoryScreen(const Calc& calc, LocalizationManager* localization)
+    : TextScreen({}), calc_ref(calc), localization_(localization) {
     lines_ = make_string();
-    defaultstring = "История пуста.";
+    if (localization_) {
+        defaultstring = localization_->get_text("history.empty", "History is empty.");
+    } else {
+        defaultstring = "History is empty.";
+    }
 }
 
 void HistoryScreen::update_lines() {
@@ -27,7 +32,10 @@ const vector<string> HistoryScreen::make_string() {
             else
                 text.clear();
 
-            items.push_back("> " + text);
+            const std::string prefix = localization_
+                                           ? localization_->get_text("history.entry_prefix", "> ")
+                                           : "> ";
+            items.push_back(prefix + text);
         }
 
         return items;

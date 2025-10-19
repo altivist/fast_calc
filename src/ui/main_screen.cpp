@@ -4,15 +4,22 @@
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/event.hpp>
 
-MainScreen::MainScreen(function<double(const string&)> evaluator)
-    : eval_fn(move(evaluator)) {}
+MainScreen::MainScreen(function<double(const string&)> evaluator,
+                       LocalizationManager localization)
+    : eval_fn(move(evaluator)), localization_(std::move(localization)) {
+    localization_.load();
+}
 
 void MainScreen::Run() {
 
-    vector<string> tabs = {"Калькулятор", "Помощь", "О программе"};
+    vector<string> tabs = {
+        localization_.get_text("main.tabs.calculator", "Calculator"),
+        localization_.get_text("main.tabs.help", "Help"),
+        localization_.get_text("main.tabs.about", "About"),
+    };
     Component tab_toggle = Toggle(&tabs, &current_tab);
-    HistoryScreen history(calc);
-    Component input_box = Input(&input, "Введите выражение...");
+    HistoryScreen history(calc, &localization_);
+    Component input_box = Input(&input, localization_.get_text("main.input_placeholder", "Enter expression..."));
 
     input_box |= CatchEvent([&](Event e) {
         if (e == Event::Return || (e.is_character() && e.character() == "=")) {
@@ -37,7 +44,9 @@ void MainScreen::Run() {
             help_text.push_back("Line " + std::to_string(i));
 
     TextScreen all_story(help_text);
+    all_story.set_default_string(localization_.get_text("text_screen.empty", "No lines"));
     TextScreen help(help_text);
+    help.set_default_string(localization_.get_text("text_screen.empty", "No lines"));
 
 
     Component container = Container::Vertical({
@@ -142,13 +151,13 @@ void MainScreen::Run() {
     Component renderer = Renderer(container, [&] {
 
         return vbox({
-            text("FTXUI Калькулятор") | bold | center,
+            text(localization_.get_text("main.title", "FTXUI Calculator")) | bold | center,
             separator(),
             tab_toggle->Render() | center,
             separator(),
             tabs_content ->Render() | flex,
             separator(),
-            hbox({text("> "), input_box->Render()}) | border
+            hbox({text(localization_.get_text("history.entry_prefix", "> ")), input_box->Render()}) | border
         }) | flex;
     });
 
