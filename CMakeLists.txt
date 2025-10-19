@@ -13,5 +13,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # )
 
 # FetchContent_MakeAvailable(ftxui)
-
-add_executable(fast_calc src/main.cpp)
+add_executable(fast_calc
+    src/main.cpp
+    src/token.cpp
+    src/execute.cpp
+    src/AST.cpp
+)
+target_include_directories(fast_calc PRIVATE src)
