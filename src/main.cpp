@@ -7,6 +7,8 @@
 #endif
 
 #include "ui/main_screen.hpp"
+#include "core/config_manager.hpp"
+#include "core/localization.hpp"
 
 double eval_func(const std::string &expr)
 {
@@ -39,7 +41,9 @@ double eval_func(const std::string &expr)
 
 int main()
 {
-    MainScreen app(eval_func);
+    ConfigManager config("fast_calc");
+    LocalizationManager localization("lang");
+    MainScreen app(eval_func, config, localization);
     app.Run();
     return 0;
 }

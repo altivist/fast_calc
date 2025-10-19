@@ -39,6 +39,7 @@ src/ui/history_now_screen.cpp
 src/core/file_manager.cpp
 src/core/history_manager.cpp
 src/core/localization.cpp
+src/core/config_manager.cpp
 
 )
 
@@ -90,4 +91,44 @@ target_link_libraries(history_manager_tests
 
 if (BUILD_TESTING)
   catch_discover_tests(history_manager_tests)
+endif()
+
+add_executable(config_manager_tests
+  tests/config_manager_tests.cpp
+  src/core/config_manager.cpp
+  src/core/file_manager.cpp
+)
+
+target_link_libraries(config_manager_tests
+  PRIVATE tomlplusplus::tomlplusplus
+  PRIVATE ftxui::component
+  PRIVATE ftxui::screen
+  PRIVATE ftxui::dom
+  PRIVATE Catch2::Catch2WithMain
+)
+
+if (BUILD_TESTING)
+  catch_discover_tests(config_manager_tests)
+endif()
+
+add_executable(localization_manager_tests
+  tests/localization_manager_tests.cpp
+  src/core/localization.cpp
+  src/core/file_manager.cpp
+)
+
+target_link_libraries(localization_manager_tests
+  PRIVATE tomlplusplus::tomlplusplus
+  PRIVATE ftxui::component
+  PRIVATE ftxui::screen
+  PRIVATE ftxui::dom
+  PRIVATE Catch2::Catch2WithMain
+)
+
+if (APPLE)
+  target_link_libraries(localization_manager_tests PRIVATE "-framework CoreFoundation")
+endif()
+
+if (BUILD_TESTING)
+  catch_discover_tests(localization_manager_tests)
 endif()

@@ -1,17 +1,54 @@
 #include "main_screen.hpp"
+#include <algorithm>
+#include <cctype>
 #include <cmath>
+#include <unordered_map>
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/event.hpp>
 
-MainScreen::MainScreen(function<double(const string&)> evaluator,
-                       LocalizationManager localization)
-    : eval_fn(move(evaluator)), localization_(std::move(localization)) {
-    localization_.load();
+namespace
+{
+    std::string ToLower(std::string value)
+    {
+        std::transform(value.begin(), value.end(), value.begin(), [](unsigned char c) {
+            return static_cast<char>(std::tolower(c));
+        });
+        return value;
+    }
+
+    bool ParseHexComponent(const std::string &component, int &out)
+    {
+        try
+        {
+            out = std::stoi(component, nullptr, 16);
+            return out >= 0 && out <= 255;
+        }
+        catch (...)
+        {
+            return false;
+        }
+    }
+} // namespace
+
+MainScreen::MainScreen(function<double(const string &)> evaluator,
+                       ConfigManager &config,
+                       LocalizationManager &localization)
+    : eval_fn(std::move(evaluator)),
+      config_(config),
+      localization_(localization)
+{
+    config_.load();
+    init_from_config();
+    if (config_dirty_)
+    {
+        config_.save();
+        config_dirty_ = false;
+    }
 }
 
-void MainScreen::Run() {
-
+void MainScreen::Run()
+{
     vector<string> tabs = {
         localization_.get_text("main.tabs.calculator", "Calculator"),
         localization_.get_text("main.tabs.help", "Help"),
@@ -40,8 +77,8 @@ void MainScreen::Run() {
     });
 
     std::vector<std::string> help_text;
-        for (int i = 1; i <= 90; ++i)
-            help_text.push_back("Line " + std::to_string(i));
+    for (int i = 1; i <= 90; ++i)
+        help_text.push_back("Line " + std::to_string(i));
 
     TextScreen all_story(help_text);
     all_story.set_default_string(localization_.get_text("text_screen.empty", "No lines"));
@@ -53,8 +90,7 @@ void MainScreen::Run() {
         tab_toggle,
         input_box
     });
-    // Подвесить на контейнер обработку нажатий, написать хендлер в который попадает чаптер и листается объект, написать в классе туда сюда штучки и
-    // перевести классы объектов в хуйню какую-то
+
     int blatmodule = 0;
     container |= CatchEvent([&](Event e) {
         if (e == Event::CtrlQ) {
@@ -149,17 +185,133 @@ void MainScreen::Run() {
 
 
     Component renderer = Renderer(container, [&] {
+        auto title_element = text(localization_.get_text("main.title", "FTXUI Calculator")) | bold | center;
+        if (has_title_color_) {
+            title_element = title_element | color(title_color_);
+        }
+
+        auto tabs_element = tab_toggle->Render() | center;
+        if (has_accent_color_) {
+            tabs_element = tabs_element | color(accent_color_);
+        }
+
+        auto tab_content_element = tabs_content->Render() | flex;
+        auto input_row = hbox({
+            text(localization_.get_text("history.entry_prefix", "> ")),
+            input_box->Render()
+        });
+        if (has_accent_color_) {
+            input_row = input_row | color(accent_color_);
+        }
 
         return vbox({
-            text(localization_.get_text("main.title", "FTXUI Calculator")) | bold | center,
+            std::move(title_element),
             separator(),
-            tab_toggle->Render() | center,
+            std::move(tabs_element),
             separator(),
-            tabs_content ->Render() | flex,
+            std::move(tab_content_element),
             separator(),
-            hbox({text(localization_.get_text("history.entry_prefix", "> ")), input_box->Render()}) | border
+            std::move(input_row) | border
         }) | flex;
     });
 
     screen.Loop(renderer);
+
+    config_.set_locale(localization_.current_locale());
+    config_.save();
+}
+
+void MainScreen::init_from_config()
+{
+    const std::string configured_locale = config_.get_locale();
+    if (!configured_locale.empty())
+    {
+        if (!localization_.load_locale(configured_locale))
+        {
+            localization_.load();
+            if (!localization_.current_locale().empty())
+            {
+                config_.set_locale(localization_.current_locale());
+                config_dirty_ = true;
+            }
+        }
+    }
+    else
+    {
+        localization_.load();
+        if (!localization_.current_locale().empty())
+        {
+            config_.set_locale(localization_.current_locale());
+            config_dirty_ = true;
+        }
+    }
+
+    std::string title_color_name = config_.get_color("title");
+    if (title_color_name.empty())
+    {
+        title_color_name = "yellow";
+        config_.set_color("title", title_color_name);
+        config_dirty_ = true;
+    }
+    auto [title_color_value, title_valid] = parse_color(title_color_name);
+    has_title_color_ = title_valid;
+    title_color_ = title_color_value;
+
+    std::string accent_color_name = config_.get_color("accent");
+    if (accent_color_name.empty())
+    {
+        accent_color_name = "cyan";
+        config_.set_color("accent", accent_color_name);
+        config_dirty_ = true;
+    }
+    auto [accent_color_value, accent_valid] = parse_color(accent_color_name);
+    has_accent_color_ = accent_valid;
+    accent_color_ = accent_color_value;
+}
+
+std::pair<Color, bool> MainScreen::parse_color(const string &value) const
+{
+    if (value.empty())
+    {
+        return {Color::Default, false};
+    }
+
+    const std::string lower = ToLower(value);
+    if (lower == "default")
+    {
+        return {Color::Default, false};
+    }
+
+    static const std::unordered_map<std::string, Color> kNamedColors = {
+        {"black", Color::Black},
+        {"red", Color::Red},
+        {"green", Color::Green},
+        {"yellow", Color::Yellow},
+        {"blue", Color::Blue},
+        {"magenta", Color::Magenta},
+        {"cyan", Color::Cyan},
+        {"white", Color::White},
+        {"gray", Color::GrayLight},
+        {"grey", Color::GrayLight},
+    };
+
+    if (auto it = kNamedColors.find(lower); it != kNamedColors.end())
+    {
+        return {it->second, true};
+    }
+
+    if (lower.size() == 7 && lower[0] == '#')
+    {
+        int r = 0;
+        int g = 0;
+        int b = 0;
+        if (ParseHexComponent(lower.substr(1, 2), r) &&
+            ParseHexComponent(lower.substr(3, 2), g) &&
+            ParseHexComponent(lower.substr(5, 2), b))
+        {
+            return {Color::RGB(r, g, b), true};
+        }
+    }
+
+    return {Color::Default, false};
 }
