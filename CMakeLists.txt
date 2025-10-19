@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # # --- FetchContent для FTXUI ---
 include(FetchContent)
+include(CTest)
 
 FetchContent_Declare(
     ftxui
@@ -22,6 +23,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(tomlplusplus)
 
+FetchContent_Declare(
+    catch2
+    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+    GIT_TAG v3.4.0
+)
+FetchContent_MakeAvailable(catch2)
 
 add_executable(fast_calc
 src/main.cpp
@@ -29,6 +36,9 @@ src/ui/main_screen.cpp
 src/ui/calc_screen.cpp
 src/ui/text_screen.cpp
 src/ui/history_now_screen.cpp
+src/core/file_manager.cpp
+src/core/history_manager.cpp
+src/core/localization.cpp
 
 )
 
@@ -38,3 +48,42 @@ target_link_libraries(fast_calc
   PRIVATE ftxui::dom
   PRIVATE ftxui::component
 )
+
+enable_testing()
+
+add_executable(file_manager_tests
+  tests/file_manager_tests.cpp
+  src/core/file_manager.cpp
+)
+
+target_link_libraries(file_manager_tests
+  PRIVATE tomlplusplus::tomlplusplus
+  PRIVATE ftxui::component
+  PRIVATE ftxui::screen
+  PRIVATE ftxui::dom
+  PRIVATE Catch2::Catch2WithMain
+)
+
+if (BUILD_TESTING)
+  list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
+  include(Catch)
+  catch_discover_tests(file_manager_tests)
+endif()
+
+add_executable(history_manager_tests
+  tests/history_manager_tests.cpp
+  src/core/history_manager.cpp
+  src/core/file_manager.cpp
+)
+
+target_link_libraries(history_manager_tests
+  PRIVATE tomlplusplus::tomlplusplus
+  PRIVATE ftxui::component
+  PRIVATE ftxui::screen
+  PRIVATE ftxui::dom
+  PRIVATE Catch2::Catch2WithMain
+)
+
+if (BUILD_TESTING)
+  catch_discover_tests(history_manager_tests)
+endif()
