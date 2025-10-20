@@ -6,7 +6,7 @@
 
 class LogScreen: public TextScreen {
     private:
-    HistoryManager hismg = HistoryManager("заглушка, поменять, когда необходимо");
+    HistoryManager hismg = HistoryManager();
     vector<string> history_;
 
 
