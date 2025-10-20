@@ -2,16 +2,16 @@
 #include "file_manager.hpp"
 #include "../common.hpp"
 
-
-class HistoryManager : public FileManager {
+class HistoryManager : public FileManager
+{
 public:
-    explicit HistoryManager(const string& history_file);
+    explicit HistoryManager(const string &history_file = "history");
 
     void load() override;
     void save() override;
 
-    void add_entry(const string& entry);
-    const vector<string>& get_history() const;
+    void add_entry(const string &entry);
+    const vector<string> &get_history() const;
 
 private:
     string history_file_path_;
