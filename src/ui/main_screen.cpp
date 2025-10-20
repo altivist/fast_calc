@@ -64,8 +64,11 @@ void MainScreen::Run()
                 try {
                     double res = eval_fn(input);
                     calc.add_result(input, res);
+                } catch (const std::exception& e) {
+                    std::string err = e.what();
+                    calc.add_result_exception("[Ошибка: " + err + "]");
                 } catch (...) {
-                    calc.add_result(input, nan(""));
+                    calc.add_result_exception("[Неизвестная ошибка]");
                 }
                 input.clear();
                 history.handle_event(1);
@@ -185,7 +188,7 @@ void MainScreen::Run()
 
 
     Component renderer = Renderer(container, [&] {
-        auto title_element = text(localization_.get_text("main.title", "FTXUI Calculator")) | bold | center;
+        auto title_element = text(localization_.get_text("main.title", "Calculator")) | bold | center;
         if (has_title_color_) {
             title_element = title_element | color(title_color_);
         }
