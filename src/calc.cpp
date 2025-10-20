@@ -62,7 +62,7 @@ double eval_func(const std::string &input)
     //     throw std::runtime_error("Фатальная ошибка: не удалось прочитать ввод");
     // }
 
-    // std::vector<Token> tokens = lexing(input);
+    std::vector<Token> tokens = lexing(input);
     // // debug1(tokens);
     // std::shared_ptr<Node> ast = parsing_to_ast(tokens);
     // // debug2(ast);
