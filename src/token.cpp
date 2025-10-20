@@ -1,4 +1,4 @@
-  // src/token.cpp
+// src/token.cpp
 // Выполняет Смирнов Даниил
 #include <vector>
 #include <stdexcept>
