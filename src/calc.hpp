@@ -21,3 +21,5 @@ static bool isConstName(const std::string &id)
 {
     return id == "pi" || id == "e" || id == "phi";
 }
+
+int eval_fn();

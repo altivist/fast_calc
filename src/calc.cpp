@@ -1,4 +1,5 @@
-// src/main.cpp
+// src/calc.cpp
+// Выполняет Тычина Ян
 #include <iostream>
 
 #include "AST.hpp"
@@ -50,24 +51,24 @@ static void debug2(const std::shared_ptr<Node> &node)
     cout << "\n\n";
 }
 
-int main()
+double eval_fn(const std::string &input)
 {
     try
     {
-        init();
-        std::string input;
+        // init();
+        // std::string input;
 
-        if (!std::getline(std::cin, input))
-        {
-            throw std::runtime_error("Фатальная ошибка: не удалось прочитать ввод");
-        }
+        // if (!std::getline(std::cin, input))
+        // {
+        //     throw std::runtime_error("Фатальная ошибка: не удалось прочитать ввод");
+        // }
 
         std::vector<Token> tokens = lexing(input);
         debug1(tokens);
         std::shared_ptr<Node> ast = parsing_to_ast(tokens);
         debug2(ast);
         std::string output = executing(ast);
-        cout << "Ответ: " << output << "\n";
+        return std::stod(output);
     }
     catch (const CalcError &e)
     {
@@ -84,5 +85,4 @@ int main()
         std::cerr << "ЧТО?\n";
         return -666;
     }
-    return 0;
 }
