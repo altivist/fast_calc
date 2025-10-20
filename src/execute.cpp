@@ -1,4 +1,5 @@
 // src/execute.cpp
+// Выполняет Хирвонен Матвей и Ефимов Игорь
 #include <sstream>
 #include <cmath>
 
@@ -204,4 +205,10 @@ static string format_number(double x)
             return s;
     }
     throw CalcError("Невозможно вывести число в 15 символов");
+}
+
+string executing(const std::shared_ptr<Node> &ast)
+{
+    double v = eval(ast);
+    return format_number(v);
 }
