@@ -11,9 +11,8 @@ namespace
 {
     std::string ToLower(std::string value)
     {
-        std::transform(value.begin(), value.end(), value.begin(), [](unsigned char c) {
-            return static_cast<char>(std::tolower(c));
-        });
+        std::transform(value.begin(), value.end(), value.begin(), [](unsigned char c)
+                       { return static_cast<char>(std::tolower(c)); });
         return value;
     }
 
@@ -58,7 +57,8 @@ void MainScreen::Run()
     HistoryScreen history(calc, &localization_);
     Component input_box = Input(&input, localization_.get_text("main.input_placeholder", "Enter expression..."));
 
-    input_box |= CatchEvent([&](Event e) {
+    input_box |= CatchEvent([&](Event e)
+                            {
         if (e == Event::Return || (e.is_character() && e.character() == "=")) {
             if (!input.empty()) {
                 try {
@@ -76,8 +76,28 @@ void MainScreen::Run()
             }
             return true;
         }
-        return false;
-    });
+        return false; });
+
+    // input_box |= CatchEvent([&](Event e)
+    //                         {
+    //     if (e == Event::Return || (e.is_character() && e.character() == "=")) {
+    //         if (!input.empty()) {
+    //             try {
+    //                 double res = eval_fn(input);
+    //                 calc.add_result(input, res);
+    //             } catch (const std::exception& e) {
+    //                 std::string err = e.what(); // ← строка с сообщением исключения
+    //                 calc.add_result_exception("[Ошибка: " + err + "]");
+    //             } catch (...) {
+    //                 calc.add_result_exception("[Неизвестная ошибка]");
+    //             }
+    //             input.clear();
+    //             history.handle_event(1);
+    //             current_tab = 0; // Возвращаемся в калькулятор
+    //         }
+    //         return true;
+    //     }
+    //     return false; });
 
     std::vector<std::string> help_text;
     for (int i = 1; i <= 90; ++i)
@@ -88,14 +108,12 @@ void MainScreen::Run()
     TextScreen help(help_text);
     help.set_default_string(localization_.get_text("text_screen.empty", "No lines"));
 
-
-    Component container = Container::Vertical({
-        tab_toggle,
-        input_box
-    });
+    Component container = Container::Vertical({tab_toggle,
+                                               input_box});
 
     int blatmodule = 0;
-    container |= CatchEvent([&](Event e) {
+    container |= CatchEvent([&](Event e)
+                            {
         if (e == Event::CtrlQ) {
             screen.Exit();
             return true;
@@ -177,15 +195,12 @@ void MainScreen::Run()
             return true;
         }
 
-        return false;
-    });
+        return false; });
 
-    Component tabs_content = Container::Tab({
-        history.get_component(),
-        help.get_component(),
-        all_story.get_component()
-    }, &current_tab);
-
+    Component tabs_content = Container::Tab({history.get_component(),
+                                             help.get_component(),
+                                             all_story.get_component()},
+                                            &current_tab);
 
     Component renderer = Renderer(container, [&] {
         auto title_element = text(localization_.get_text("main.title", "Calculator")) | bold | center;
@@ -215,8 +230,7 @@ void MainScreen::Run()
             std::move(tab_content_element),
             separator(),
             std::move(input_row) | border
-        }) | flex;
-    });
+        }) | flex; });
 
     screen.Loop(renderer);
 

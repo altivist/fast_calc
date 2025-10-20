@@ -10,34 +10,36 @@
 #include "core/config_manager.hpp"
 #include "core/localization.hpp"
 
-double eval_func(const std::string &expr)
-{
-    std::stringstream ss(expr);
-    double result = 0;
-    double value = 0;
-    char op = '+';
-    while (ss >> value)
-    {
-        switch (op)
-        {
-        case '+':
-            result += value;
-            break;
-        case '-':
-            result -= value;
-            break;
-        case '*':
-            result *= value;
-            break;
-        case '/':
-            if (value != 0)
-                result /= value;
-            break;
-        }
-        ss >> op;
-    }
-    return result;
-}
+#include "calc.hpp"
+
+// double eval_func(const std::string &expr)
+// {
+//     std::stringstream ss(expr);
+//     double result = 0;
+//     double value = 0;
+//     char op = '+';
+//     while (ss >> value)
+//     {
+//         switch (op)
+//         {
+//         case '+':
+//             result += value;
+//             break;
+//         case '-':
+//             result -= value;
+//             break;
+//         case '*':
+//             result *= value;
+//             break;
+//         case '/':
+//             if (value != 0)
+//                 result /= value;
+//             break;
+//         }
+//         ss >> op;
+//     }
+//     return result;
+// }
 
 int main()
 {
