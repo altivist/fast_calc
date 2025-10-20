@@ -63,10 +63,9 @@ double eval_func(const std::string &input)
     // }
 
     std::vector<Token> tokens = lexing(input);
-    // // debug1(tokens);
-    // std::shared_ptr<Node> ast = parsing_to_ast(tokens);
-    // // debug2(ast);
-    // std::string output = executing(ast);
-    // return std::stod(output);
-    return 123.123;
+    // debug1(tokens);
+    std::shared_ptr<Node> ast = parsing_to_ast(tokens);
+    // debug2(ast);
+    std::string output = executing(ast);
+    return std::stod(output);
 }
