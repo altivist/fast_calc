@@ -51,38 +51,22 @@ static void debug2(const std::shared_ptr<Node> &node)
     cout << "\n\n";
 }
 
-double eval_fn(const std::string &input)
+double eval_func(const std::string &input)
 {
-    try
-    {
-        // init();
-        // std::string input;
 
-        // if (!std::getline(std::cin, input))
-        // {
-        //     throw std::runtime_error("Фатальная ошибка: не удалось прочитать ввод");
-        // }
+    // init();
+    // std::string input;
 
-        std::vector<Token> tokens = lexing(input);
-        debug1(tokens);
-        std::shared_ptr<Node> ast = parsing_to_ast(tokens);
-        debug2(ast);
-        std::string output = executing(ast);
-        return std::stod(output);
-    }
-    catch (const CalcError &e)
-    {
-        std::cerr << "Ошибка: " << e.what() << "\n";
-        return 1;
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << "Фатальная ошибка: " << e.what() << "\n";
-        return -1;
-    }
-    catch (...)
-    {
-        std::cerr << "ЧТО?\n";
-        return -666;
-    }
+    // if (!std::getline(std::cin, input))
+    // {
+    //     throw std::runtime_error("Фатальная ошибка: не удалось прочитать ввод");
+    // }
+
+    std::vector<Token> tokens = lexing(input);
+    // // debug1(tokens);
+    // std::shared_ptr<Node> ast = parsing_to_ast(tokens);
+    // // debug2(ast);
+    // std::string output = executing(ast);
+    // return std::stod(output);
+    return 123.123;
 }
