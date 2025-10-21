@@ -6,16 +6,12 @@
 
 class LogScreen: public TextScreen {
     private:
-    HistoryManager hismg = HistoryManager();
-    vector<string> history_;
-
+    HistoryManager& hismg;
+    protected:
+    void update_lines() override;
 
     public:
-    LogScreen(): TextScreen({}){
-
-        hismg.load();
-
-
-    }
+    LogScreen(HistoryManager& manager);
+    ~LogScreen() = default;
 
 };

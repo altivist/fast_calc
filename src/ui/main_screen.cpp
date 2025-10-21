@@ -1,4 +1,7 @@
 #include "main_screen.hpp"
+#include "../core/history_manager.hpp"
+#include "calc_screen.hpp"
+#include "log_screen.hpp"
 #include <algorithm>
 #include <cctype>
 #include <cmath>
@@ -33,10 +36,13 @@ namespace
 
 MainScreen::MainScreen(function<double(const string &)> evaluator,
                        ConfigManager &config,
-                       LocalizationManager &localization)
+                       LocalizationManager &localization,
+                       HistoryManager &hmanager_)
     : eval_fn(std::move(evaluator)),
       config_(config),
-      localization_(localization)
+      localization_(localization),
+      calc(hmanager_)
+
 {
     config_.load();
     init_from_config();
@@ -49,10 +55,12 @@ MainScreen::MainScreen(function<double(const string &)> evaluator,
 
 void MainScreen::Run()
 {
+    calc.get_manager().load();
+
     vector<string> tabs = {
         localization_.get_text("main.tabs.calculator", "Calculator"),
         localization_.get_text("main.tabs.help", "Help"),
-        localization_.get_text("main.tabs.about", "About"),
+        localization_.get_text("main.tabs.about", "History"),
     };
     Component tab_toggle = Toggle(&tabs, &current_tab);
     HistoryScreen history(calc, &localization_);
@@ -66,9 +74,9 @@ void MainScreen::Run()
                     calc.add_result(input, res);
                 } catch (const std::exception& e) {
                     std::string err = e.what();
-                    calc.add_result_exception("[Ошибка: " + err + "]");
+                    calc.add_result_exception("[Warrning: " + err + "]");
                 } catch (...) {
-                    calc.add_result_exception("[Неизвестная ошибка]");
+                    calc.add_result_exception("[Unknown error]");
                 }
                 input.clear();
                 history.handle_event(1);
@@ -83,8 +91,12 @@ void MainScreen::Run()
     for (int i = 1; i <= 90; ++i)
         help_text.push_back("Line " + std::to_string(i));
 
-    TextScreen all_story(help_text);
+    // TextScreen all_story(help_text);
+
+    LogScreen all_story(calc.get_manager());
+
     all_story.set_default_string(localization_.get_text("text_screen.empty", "No lines"));
+
     TextScreen help(help_text);
     help.set_default_string(localization_.get_text("text_screen.empty", "No lines"));
 
@@ -219,7 +231,7 @@ void MainScreen::Run()
     });
 
     screen.Loop(renderer);
-
+    calc.get_manager().save();
     config_.set_locale(localization_.current_locale());
     config_.save();
 }

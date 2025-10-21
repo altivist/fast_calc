@@ -4,6 +4,7 @@
 #include "text_screen.hpp"
 #include "../core/config_manager.hpp"
 #include "history_now_screen.hpp"
+#include "../core/history_manager.hpp"
 #include "../core/localization.hpp"
 #include <utility>
 
@@ -11,7 +12,7 @@ class MainScreen {
 public:
     MainScreen(function<double(const string&)> evaluator,
                ConfigManager& config,
-               LocalizationManager& localization);
+               LocalizationManager& localization, HistoryManager& hmanager_);
     void Run();
 
 private:
