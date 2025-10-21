@@ -495,6 +495,15 @@ LocalizationManager::LocalizationManager(const string &locale_dir)
     : locale_directory_(to_path(locale_dir).string())
 {
     create_dir(locale_directory_);
+    const std::filesystem::path default_file = std::filesystem::path(locale_directory_) / "default.txt";
+    if (!std::filesystem::exists(default_file))
+    {
+        std::ofstream ofs(default_file);
+        if (ofs)
+        {
+            ofs << "Add some localization to the lang folder\n";
+        }
+    }
     detect_system_locale();
 }
 

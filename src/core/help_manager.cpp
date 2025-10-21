@@ -1,5 +1,4 @@
 #include "help_manager.hpp"
-#include <iostream>
 #include <fstream>
 #include <stdexcept>
 

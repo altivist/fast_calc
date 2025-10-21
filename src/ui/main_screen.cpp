@@ -10,6 +10,7 @@
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/event.hpp>
 #include "../core/help_manager.hpp"
+#include "text_screen.hpp"
 
 
 namespace
@@ -65,8 +66,19 @@ void MainScreen::Run()
         localization_.get_text("main.tabs.about", "History"),
     };
 
-    HelpManager help_text = HelpManager("manual.txt");
+    string path = "";
+    if (!localization_.current_locale().empty() && localization_.detect_system_locale()){
+    path = "lang/"+localization_.current_locale()+"/manual.txt";
+    } else {
+    path = "lang/README.txt";
+    }
+
+    cerr << path << " " << localization_.detect_system_locale() << "\n";
+
+    HelpManager help_text = HelpManager(path);
     help_text.load();
+    TextScreen help(help_text.get_lines());
+
 
     Component tab_toggle = Toggle(&tabs, &current_tab);
     HistoryScreen history(calc, &localization_);
@@ -99,7 +111,7 @@ void MainScreen::Run()
 
     all_story.set_default_string(localization_.get_text("text_screen.empty", "No lines"));
 
-    TextScreen help(help_text.get_lines());
+
     help.set_default_string(localization_.get_text("text_screen.empty", "No lines"));
 
 
