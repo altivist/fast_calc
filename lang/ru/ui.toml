@@ -1,11 +1,11 @@
 [main]
-title = "FTXUI Калькулятор"
+title = "Калькулятор"
 input_placeholder = "Введите выражение..."
 
 [main.tabs]
 calculator = "Калькулятор"
 help = "Помощь"
-about = "О программе"
+about = "История"
 
 [history]
 empty = "История пуста."

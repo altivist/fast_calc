@@ -93,7 +93,7 @@ void MainScreen::Run()
 
     // TextScreen all_story(help_text);
 
-    LogScreen all_story(calc.get_manager());
+    LogScreen all_story(calc.get_manager(), &localization_);
 
     all_story.set_default_string(localization_.get_text("text_screen.empty", "No lines"));
 
