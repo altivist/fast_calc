@@ -11,7 +11,7 @@ TextScreen::TextScreen(const vector<string>& lines)
         Elements visible;
         int end = std::min<int>(scroll_position_ + max_visible_, (int)lines_.size());
         for (int i = scroll_position_; i < end; ++i) {
-            visible.push_back(text(lines_[i])); // без dim
+            visible.push_back(text(lines_[i]));
         };
 
         if (lines_.empty()){
@@ -24,7 +24,7 @@ TextScreen::TextScreen(const vector<string>& lines)
 
 Component TextScreen::get_component() {
     auto base = Renderer([this] {
-        update_lines();             // обновляем строки перед рендером
+        update_lines();
         return render_lines() | border | flex;
     });
 

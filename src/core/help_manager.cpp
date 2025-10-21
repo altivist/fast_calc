@@ -14,7 +14,7 @@
 
 using namespace std;
 
-// Определяем директорию исполняемого файла
+
 filesystem::path HelpManager::executable_dir() const
 {
 #ifdef _WIN32
@@ -30,14 +30,14 @@ filesystem::path HelpManager::executable_dir() const
     if (_NSGetExecutablePath(buffer, &size) != 0)
         throw runtime_error("Не удалось получить путь к исполняемому файлу (macOS)");
 
-    // Разрешаем возможные символические ссылки
+
     char resolved[PATH_MAX];
     if (realpath(buffer, resolved) == nullptr)
         throw runtime_error("Не удалось разрешить путь к исполняемому файлу (macOS)");
 
     return filesystem::path(resolved).parent_path();
 
-#else // Linux и другие POSIX
+#else
     char buffer[PATH_MAX];
     ssize_t len = readlink("/proc/self/exe", buffer, sizeof(buffer) - 1);
     if (len == -1)

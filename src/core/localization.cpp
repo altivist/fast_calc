@@ -525,18 +525,6 @@ void LocalizationManager::load()
         }
     }
 
-    // for (const auto &locale : locales)
-    // {
-    //     if (locale == current_locale_)
-    //     {
-    //         continue;
-    //     }
-    //     if (load_locale(locale))
-    //     {
-    //         return;
-    //     }
-    // }
-
     texts_.clear();
 }
 

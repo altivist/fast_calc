@@ -97,7 +97,7 @@ void MainScreen::Run()
                 }
                 input.clear();
                 history.handle_event(1);
-                current_tab = 0; // Возвращаемся в калькулятор
+                current_tab = 0;
             }
             return true;
         }

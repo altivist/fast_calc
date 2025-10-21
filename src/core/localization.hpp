@@ -7,9 +7,8 @@ class LocalizationManager : public FileManager {
 public:
     explicit LocalizationManager(const string& locale_dir);
 
-    void load() override;  // Загружает текущую локаль
-    void save() override;  // Можно сохранять кастомные тексты, если нужно
-
+    void load() override;
+    void save() override;
     bool load_locale(const string& locale_code);
     string get_text(const string& key, const string& default_text = "") const;
     vector<string> available_locales() const;

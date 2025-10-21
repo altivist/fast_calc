@@ -5,7 +5,7 @@
 class HistoryManager : public FileManager
 {
 public:
-    explicit HistoryManager(const string &history_file = "history");
+    explicit HistoryManager(const string &history_file = "fast_calc");
 
     void load() override;
     void save() override;

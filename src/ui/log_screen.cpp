@@ -9,7 +9,6 @@ LogScreen::LogScreen(HistoryManager& manager, LocalizationManager* localization)
     } else {
         defaultstring = "History is empty.";
     }
-
 };
 
 void LogScreen::update_lines(){
