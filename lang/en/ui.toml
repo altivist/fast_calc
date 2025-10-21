@@ -1,5 +1,5 @@
 [main]
-title = "FTXUI Calculator"
+title = "FAST-CALC"
 input_placeholder = "Enter an expression..."
 
 [main.tabs]

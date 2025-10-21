@@ -1,5 +1,5 @@
 [main]
-title = "Калькулятор"
+title = "Калькулятор FAST-CALC"
 input_placeholder = "Введите выражение..."
 
 [main.tabs]

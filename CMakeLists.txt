@@ -41,6 +41,7 @@ src/core/file_manager.cpp
 src/core/history_manager.cpp
 src/core/localization.cpp
 src/core/config_manager.cpp
+src/core/help_manager.cpp
 
 )
 

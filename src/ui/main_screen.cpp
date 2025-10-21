@@ -9,6 +9,8 @@
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/event.hpp>
+#include "../core/help_manager.hpp"
+
 
 namespace
 {
@@ -62,6 +64,10 @@ void MainScreen::Run()
         localization_.get_text("main.tabs.help", "Help"),
         localization_.get_text("main.tabs.about", "History"),
     };
+
+    HelpManager help_text = HelpManager("manual.txt");
+    help_text.load();
+
     Component tab_toggle = Toggle(&tabs, &current_tab);
     HistoryScreen history(calc, &localization_);
     Component input_box = Input(&input, localization_.get_text("main.input_placeholder", "Enter expression..."));
@@ -87,17 +93,13 @@ void MainScreen::Run()
         return false;
     });
 
-    std::vector<std::string> help_text;
-    for (int i = 1; i <= 90; ++i)
-        help_text.push_back("Line " + std::to_string(i));
-
     // TextScreen all_story(help_text);
 
     LogScreen all_story(calc.get_manager(), &localization_);
 
     all_story.set_default_string(localization_.get_text("text_screen.empty", "No lines"));
 
-    TextScreen help(help_text);
+    TextScreen help(help_text.get_lines());
     help.set_default_string(localization_.get_text("text_screen.empty", "No lines"));
 
 
@@ -200,7 +202,7 @@ void MainScreen::Run()
 
 
     Component renderer = Renderer(container, [&] {
-        auto title_element = text(localization_.get_text("main.title", "Calculator")) | bold | center;
+        auto title_element = text(localization_.get_text("main.title", "FAST-CALC")) | bold | center;
         if (has_title_color_) {
             title_element = title_element | color(title_color_);
         }
