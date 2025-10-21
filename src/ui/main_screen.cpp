@@ -73,7 +73,6 @@ void MainScreen::Run()
     path = "lang/README.txt";
     }
 
-    cerr << path << " " << localization_.detect_system_locale() << "\n";
 
     HelpManager help_text = HelpManager(path);
     help_text.load();
@@ -105,7 +104,6 @@ void MainScreen::Run()
         return false;
     });
 
-    // TextScreen all_story(help_text);
 
     LogScreen all_story(calc.get_manager(), &localization_);
 

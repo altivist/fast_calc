@@ -335,6 +335,7 @@ namespace
     std::string ChooseMatchingLocale(const std::vector<std::string> &available,
                                      const std::string &requested)
     {
+
         if (requested.empty() || available.empty())
         {
             return {};
@@ -495,7 +496,7 @@ LocalizationManager::LocalizationManager(const string &locale_dir)
     : locale_directory_(to_path(locale_dir).string())
 {
     create_dir(locale_directory_);
-    const std::filesystem::path default_file = std::filesystem::path(locale_directory_) / "default.txt";
+    const std::filesystem::path default_file = std::filesystem::path(locale_directory_) / "README.txt";
     if (!std::filesystem::exists(default_file))
     {
         std::ofstream ofs(default_file);
@@ -524,17 +525,17 @@ void LocalizationManager::load()
         }
     }
 
-    for (const auto &locale : locales)
-    {
-        if (locale == current_locale_)
-        {
-            continue;
-        }
-        if (load_locale(locale))
-        {
-            return;
-        }
-    }
+    // for (const auto &locale : locales)
+    // {
+    //     if (locale == current_locale_)
+    //     {
+    //         continue;
+    //     }
+    //     if (load_locale(locale))
+    //     {
+    //         return;
+    //     }
+    // }
 
     texts_.clear();
 }

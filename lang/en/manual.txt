@@ -1,0 +1,44 @@
+FAST_CALC — console mathematical calculator
+
+Supported operations:
+  +   addition             (2+3)
+  -   subtraction          (7-4)
+  *   multiplication       (3*4)
+  /   division             (10/4)
+  ^   power                (2^3)
+  !   factorial            (5!)
+  |x| absolute value       (|5-8|)
+  ( ) parentheses          ((2+3)*4)
+
+Degrees are marked with an apostrophe ('):
+  sin(90') = 1,  cos(180') = -1
+Without ', angles are in radians (sin(pi/2)=1)
+
+Constants:
+  pi = 3.1415926535
+  e  = 2.7182818284
+
+Functions (1 argument):
+  sin, cos, tan, asin, acos, atan
+  sqrt, ln, lg, abs
+
+Functions (2 arguments):
+  pow(x, y)  – x to the power of y
+  root(x, y) – y-th root of x
+  log(x, y)  – logarithm of x with base y
+
+──────────────────────────────
+Hotkeys:
+
+  Ctrl + Q       — exit the program
+  Enter / =      — evaluate expression
+  Ctrl + ↑       — scroll up
+  Ctrl + ↓       — scroll down
+  Ctrl + ←       — scroll right (calculator only)
+  Ctrl + →       — scroll left (calculator only)
+  Ctrl + R       — refresh history (calculator only)
+
+──────────────────────────────
+Errors:
+  unbalanced parentheses, division by zero,
+  unknown function, negative factorial
