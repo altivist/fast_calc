@@ -32,6 +32,10 @@ FetchContent_MakeAvailable(catch2)
 
 add_executable(fast_calc
 src/main.cpp
+src/AST.cpp
+src/calc.cpp
+src/execute.cpp
+src/token.cpp
 src/ui/main_screen.cpp
 src/ui/calc_screen.cpp
 src/ui/text_screen.cpp

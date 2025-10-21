@@ -8,6 +8,8 @@
 #include "../core/localization.hpp"
 #include <utility>
 
+#include "../calc.hpp"
+
 class MainScreen {
 public:
     MainScreen(function<double(const string&)> evaluator,
