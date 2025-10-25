@@ -47,6 +47,8 @@ namespace
     {
         const fs::path provided(history_file);
 
+
+
         if (provided.empty())
         {
             return ResolveConfigRoot() / "history.log";

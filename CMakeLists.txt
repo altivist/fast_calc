@@ -40,10 +40,13 @@ src/ui/main_screen.cpp
 src/ui/calc_screen.cpp
 src/ui/text_screen.cpp
 src/ui/history_now_screen.cpp
+src/ui/log_screen.cpp
 src/core/file_manager.cpp
 src/core/history_manager.cpp
 src/core/localization.cpp
 src/core/config_manager.cpp
+src/core/help_manager.cpp
+
 )
 
 target_link_libraries(fast_calc

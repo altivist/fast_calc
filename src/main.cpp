@@ -1,3 +1,4 @@
+#include "core/history_manager.hpp"
 #ifdef __APPLE__
 #include "core/stdc++.hpp"
 #elif defined(__MACH__)
@@ -45,7 +46,8 @@ int main()
 {
     ConfigManager config("fast_calc");
     LocalizationManager localization("lang");
-    MainScreen app(eval_func, config, localization);
+    HistoryManager manager;
+    MainScreen app(eval_func, config, localization, manager);
     app.Run();
     return 0;
 }
